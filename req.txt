@@ -2,3 +2,4 @@ selenium
 fire
 python-crontab
 pyyaml
+croniter

@@ -14,32 +14,36 @@ def check(username: str = CFG['credentials']['username'], password: str = CFG['c
     driver.go_to_last_event()
 
 
-def schedule():
+def add(scheduler: bool = False, user=True):
     tab = ''
     for cron in CFG['schedule']:
         tab += '{} {} {} check >{} 2>{} # autolms\n'.format(cron, CFG['paths']['python3'], __file__,
                                                             CFG['paths']['stdout'], CFG['paths']['stderr'])
-    reset()
     cron = CronTab(tab=tab)
-    cron.write(user=True)
+    if scheduler:
+        for _ in cron.run_scheduler():
+            print("Doing...")
+    else:
+        reset(user)
+        cron.write(user=user)
 
 
-def show():
-    cron = CronTab(user=True)
+def show(user=True):
+    cron = CronTab(user=user)
     for job in cron:
         print(job)
 
 
-def reset():
-    cron = CronTab(user=True)
-    cron.remove_all()
+def reset(user=True):
+    cron = CronTab(user=user)
+    cron.remove_all(comment='autolms')
     cron.write()
 
 
 if __name__ == '__main__':
     fire.Fire({
         'check': check,
-        'schedule': schedule,
+        'add': add,
         'show': show,
         'reset': reset
     })

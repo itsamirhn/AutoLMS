@@ -4,6 +4,13 @@ credentials:
 paths:
   python3: '/bin/python'
   chromedriver: '/usr/local/bin/chromedriver'
+  stderr: '~/Desktop/stderr.log'
+  stdout: '~/Desktop/stdout.log'
 schedule:
-  - '* * * * *'
+  - '0 8 * * 0-3,6'
+  - '0 10 * * 3'
+  - '0 12 * * 3'
+  - '30 13 * * 0-2,6'
+  - '30 13 * * 0-2,6'
+  - '30 15 * * 1,6'
 
