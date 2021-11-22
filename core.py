@@ -13,22 +13,22 @@ import os
 
 class LMSDriver:
 
-    def __init__(self, username: str = None, password: str = None, base_url: str = 'https://lms.khu.ac.ir',
+    def __init__(self, chromedriver: str, username: str, password: str, base_url: str = 'https://lms.khu.ac.ir',
                  cookies_path='cookies.pkl'):
         self.username = username
         self.password = password
         self.base_url = base_url
         option = ChromeOptions()
         option.add_experimental_option('detach', True)
-        self.driver = Chrome(chrome_options=option)
+        self.driver = Chrome(executable_path=chromedriver, chrome_options=option)
         self.cookies_path = cookies_path
 
     @property
-    def login_url(self):
+    def login_url(self) -> str:
         return self.base_url + '/login/index.php'
 
     @property
-    def my_url(self):
+    def my_url(self) -> str:
         return self.base_url + '/my/'
 
     def save_cookies(self):

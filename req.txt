@@ -1,3 +1,4 @@
 selenium
 fire
-schedule
+python-crontab
+pyyaml
