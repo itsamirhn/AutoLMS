@@ -93,6 +93,7 @@ class LMSDriver:
             (By.CSS_SELECTOR, 'div.open-in-{}-button div.button-content'.format('browser' if browser else 'app'))))
         action = ActionChains(self.driver)
         action.move_to_element(button).click().perform()
+        self.driver.maximize_window()
 
     def check(self):
         # TODO: Check last event exist or not!
