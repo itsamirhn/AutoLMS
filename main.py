@@ -11,7 +11,7 @@ with open(dir_path + '/config.yml', 'r') as f:
 
 def check(username: str = CFG['credentials']['username'], password: str = CFG['credentials']['password']):
     driver = LMSDriver(CFG['paths']['chromedriver'], username, password)
-    driver.go_to_my()
+    driver.go_to_last_event()
 
 
 def schedule():
