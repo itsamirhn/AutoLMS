@@ -1,0 +1,9 @@
+credentials:
+  username: '4001234123'
+  password: 'qwerty'
+paths:
+  python3: '/bin/python'
+  chromedriver: '/usr/local/bin/chromedriver'
+schedule:
+  - '* * * * *'
+
