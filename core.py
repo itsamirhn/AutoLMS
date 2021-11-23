@@ -62,8 +62,8 @@ class LMSDriver:
         wait = WebDriverWait(self.driver, timeout)
         wait.until(expected_conditions.element_to_be_clickable((by, value))).click()
 
-    def click_text(self, text):
-        self.click(By.XPATH, '//*[text() = "{}"]'.format(text))
+    def click_text(self, text, timeout: int = 10):
+        self.click(By.XPATH, "//*[contains(text(), '{}')]".format(text), timeout)
 
     def login(self):
         if not self.username or not self.password:
@@ -95,12 +95,19 @@ class LMSDriver:
             raise Exception('Driver is not on Adobe Connect event!')
         self.click(By.CLASS_NAME, 'aconbtnjoin')
         self.driver.switch_to.window(self.driver.window_handles[1])
-        wait = WebDriverWait(self.driver, 20)
+        wait = WebDriverWait(self.driver, 120)
         button = wait.until(expected_conditions.presence_of_element_located(
             (By.CSS_SELECTOR, 'div.open-in-{}-button div.button-content'.format('browser' if browser else 'app'))))
         action = ActionChains(self.driver)
         action.move_to_element(button).click().perform()
+        if not browser:
+            return
         self.driver.maximize_window()
+        action.reset_actions()
+        for i in range(60):
+            action.send_keys(Keys.ESCAPE)
+            action.perform()
+            time.sleep(1)
 
     def go_to_course(self, id: str):
         self.driver.get(self.get_course_url(id))

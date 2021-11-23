@@ -1,3 +1,6 @@
+import random
+import time
+
 import fire
 import yaml
 from core import LMSDriver
@@ -5,13 +8,20 @@ from crontab import CronTab
 import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-with open(dir_path + '/config.yml', 'r') as f:
+with open(os.path.join(dir_path, 'config.yml'), 'r') as f:
     CFG = yaml.safe_load(f)
 
 
-def check(username: str = CFG['credentials']['username'], password: str = CFG['credentials']['password']):
-    driver = LMSDriver(CFG['paths']['chromedriver'], username, password)
-    driver.go_to_last_event()
+def check(username: str = CFG['credentials']['username'], password: str = CFG['credentials']['password'], tries: int = 3):
+    if tries <= 0:
+        return
+    try:
+        driver = LMSDriver(CFG['paths']['chromedriver'], username, password)
+        driver.go_to_last_event()
+    except Exception as e:
+        print(e)
+        time.sleep(random.random() * 60)
+        check(username, password, tries - 1)
 
 
 def add(scheduler: bool = False, user=True):
