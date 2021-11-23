@@ -33,6 +33,13 @@ class LMSDriver:
     def my_url(self) -> str:
         return self.base_url + '/my/'
 
+    @property
+    def course_url(self) -> str:
+        return self.base_url + '/course/view.php'
+
+    def get_course_url(self, id: str):
+        return self.course_url + '?id={}'.format(id)
+
     def save_cookies(self):
         with open(self.cookies_path, 'wb') as f:
             pickle.dump(self.driver.get_cookies(), f)
@@ -69,7 +76,7 @@ class LMSDriver:
         self.save_cookies()
 
     def go_to_my(self):
-        self.load_cookies(self.my_url)
+        self.driver.get(self.my_url)
         if self.driver.current_url == self.login_url:
             self.login()
 
@@ -94,6 +101,12 @@ class LMSDriver:
         action = ActionChains(self.driver)
         action.move_to_element(button).click().perform()
         self.driver.maximize_window()
+
+    def go_to_course(self, id: str):
+        self.driver.get(self.get_course_url(id))
+        if self.driver.current_url != self.my_url:
+            self.go_to_my()
+
 
     def check(self):
         # TODO: Check last event exist or not!
