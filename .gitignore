@@ -1,6 +1,6 @@
 selenium/
 .idea/
-cookies.pkl
+*_cookies.pkl
 config.yml
 
 ### JetBrains template
