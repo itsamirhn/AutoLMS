@@ -4,6 +4,7 @@ credentials:
 paths:
   python3: '/bin/python'
   chromedriver: '/usr/local/bin/chromedriver'
+  main: 'main.py'
   stderr: '~/Desktop/stderr.log'
   stdout: '~/Desktop/stdout.log'
 schedule:

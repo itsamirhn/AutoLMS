@@ -17,7 +17,7 @@ def check(username: str = CFG['credentials']['username'], password: str = CFG['c
 def add(scheduler: bool = False, user=True):
     tab = ''
     for cron in CFG['schedule']:
-        tab += '{} {} {} check >{} 2>{} # autolms\n'.format(cron, CFG['paths']['python3'], __file__,
+        tab += '{} {} {} check >{} 2>{} # autolms\n'.format(cron, CFG['paths']['python3'], CFG['paths']['main'],
                                                             CFG['paths']['stdout'], CFG['paths']['stderr'])
     cron = CronTab(tab=tab)
     if scheduler:
