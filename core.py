@@ -80,7 +80,7 @@ class LMSDriver:
         if self.driver.current_url == self.login_url:
             self.login()
 
-    def go_to_last_event(self):
+    def go_to_last_event(selfz):
         if self.driver.current_url != self.my_url:
             self.go_to_my()
         self.click(By.CSS_SELECTOR, 'a[data-type="event"')

@@ -13,19 +13,23 @@ with open(os.path.join(dir_path, 'config.yml'), 'r') as f:
 
 
 def check(username: str = CFG['credentials']['username'], password: str = CFG['credentials']['password'],
-          tries: int = 3):
+          tries: int = 1, duration: int = 115 * 60):
     if tries <= 0:
         return
     now = time.time()
+    driver = LMSDriver(CFG['paths']['chromedriver'], username, password)
     try:
-        driver = LMSDriver(CFG['paths']['chromedriver'], username, password)
         driver.go_to_last_event()
+        time.sleep(duration)
+        driver.driver.quit()
     except Exception as e:
         print(e)
         if time.time() - now > 60 * 10:
+            driver.driver.quit()
             return
         time.sleep(random.random() * 60)
-        check(username, password, tries - 1)
+        check(username, password, tries - 1, duration)
+
 
 
 def add(scheduler: bool = False, user=True):
