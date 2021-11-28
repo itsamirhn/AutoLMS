@@ -29,7 +29,6 @@ def check(username: str = CFG['credentials']['username'], password: str = CFG['c
         check(username, password, tries - 1)
 
 
-
 def add(scheduler: bool = False, user=True):
     tab = ''
     for cron in CFG['schedule']:
