@@ -1,11 +1,13 @@
+import os
 import random
 import time
 
 import fire
 import yaml
-from core import LMSDriver
 from crontab import CronTab
-import os
+
+from core import LMSDriver
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 with open(os.path.join(dir_path, 'config.yml'), 'r') as f:

@@ -1,14 +1,13 @@
+import os
+import pickle
 import time
 
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-
-import pickle
-import os
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class LMSDriver:
@@ -65,6 +64,9 @@ class LMSDriver:
     def click_text(self, text, timeout: int = 10):
         self.click(By.XPATH, "//*[contains(text(), '{}')]".format(text), timeout)
 
+    def click_text_multiple(self, text1, text2, timeout: int = 10):
+        self.click(By.XPATH, "//*[contains(text(), '{}') or contains(text(), '{}')]".format(text1, text2), timeout)
+
     def login(self):
         if not self.username or not self.password:
             raise Exception('No login credentials!')
@@ -84,7 +86,7 @@ class LMSDriver:
         if self.driver.current_url != self.my_url:
             self.go_to_my()
         self.click(By.CSS_SELECTOR, 'a[data-type="event"')
-        self.click_text('رفتن به فعالیت')
+        self.click_text_multiple('رفتن به فعالیت', 'Go to activity')
         if 'adobeconnect' in self.driver.current_url:
             self.go_to_adobeconnect()
         else:
@@ -113,7 +115,6 @@ class LMSDriver:
         self.driver.get(self.get_course_url(id))
         if self.driver.current_url != self.my_url:
             self.go_to_my()
-
 
     def check(self):
         # TODO: Check last event exist or not!
