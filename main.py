@@ -37,9 +37,15 @@ def check(course_id=None, username: str = CFG['credentials']['username'],
 
 def add(scheduler: bool = False, user=True):
     tab = ''
-    for cron in CFG['schedule']:
-        tab += '{} {} {} check >{} 2>{} # autolms\n'.format(cron, CFG['paths']['python3'], CFG['paths']['main'],
-                                                            CFG['paths']['stdout'], CFG['paths']['stderr'])
+    for course in CFG['courses']:
+        for cron in course['crons']:
+            tab += '{} {} {} check {} >{} 2>{} # autolms'.format(
+                cron,
+                CFG['paths']['python3'],
+                CFG['paths']['main'],
+                course['id'],
+                CFG['paths']['stdout'], CFG['paths']['stderr']
+            ) + '\n'
     cron = CronTab(tab=tab)
     if scheduler:
         for _ in cron.run_scheduler():
