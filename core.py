@@ -12,8 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class LMSDriver:
 
-    def __init__(self, chromedriver: str, username: str, password: str, base_url: str = 'https://lms.khu.ac.ir',
-                 cookies_path: str = None):
+    def __init__(self, chromedriver: str, username: str, password: str, base_url: str, cookies_path: str = None):
         self.username = username
         self.password = password
         self.base_url = base_url
@@ -36,8 +35,8 @@ class LMSDriver:
     def course_url(self) -> str:
         return self.base_url + '/course/view.php'
 
-    def get_course_url(self, id: str):
-        return self.course_url + '?id={}'.format(id)
+    def get_course_url(self, course_id):
+        return self.course_url + '?id={}'.format(course_id)
 
     def save_cookies(self):
         with open(self.cookies_path, 'wb') as f:
@@ -73,7 +72,7 @@ class LMSDriver:
         self.driver.get(self.login_url)
         self.driver.find_element(By.ID, 'username').send_keys(self.username)
         self.driver.find_element(By.ID, 'password').send_keys(self.password + Keys.RETURN)
-        if self.driver.current_url != self.my_url:
+        if self.driver.current_url == self.login_url:
             raise Exception('Invalid credentials!')
         self.save_cookies()
 
@@ -111,10 +110,20 @@ class LMSDriver:
             action.perform()
             time.sleep(1)
 
-    def go_to_course(self, id: str):
-        self.driver.get(self.get_course_url(id))
-        if self.driver.current_url != self.my_url:
-            self.go_to_my()
+    def go_to_course(self, course_id):
+        self.driver.get(self.get_course_url(course_id))
+        if self.driver.current_url == self.login_url:
+            self.login()
+            self.go_to_course(course_id)
+
+    def go_to_course_last_event(self, course_id):
+        if self.driver.current_url != self.get_course_url(course_id):
+            self.go_to_course(course_id)
+        self.click(By.XPATH, "//li[contains(@class, 'adobeconnect')][last()]//a[@class='aalink']")
+        if 'adobeconnect' in self.driver.current_url:
+            self.go_to_adobeconnect()
+        else:
+            raise Exception('Not implemented yet!')
 
     def check(self):
         # TODO: Check last event exist or not!

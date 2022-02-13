@@ -14,21 +14,25 @@ with open(os.path.join(dir_path, 'config.yml'), 'r') as f:
     CFG = yaml.safe_load(f)
 
 
-def check(username: str = CFG['credentials']['username'], password: str = CFG['credentials']['password'],
+def check(course_id=None, username: str = CFG['credentials']['username'],
+          password: str = CFG['credentials']['password'],
           tries: int = 1):
     if tries <= 0:
         return
     now = time.time()
-    driver = LMSDriver(CFG['paths']['chromedriver'], username, password)
+    driver = LMSDriver(CFG['paths']['chromedriver'], username, password, CFG['paths']['url'])
     try:
-        driver.go_to_last_event()
+        if course_id:
+            driver.go_to_course_last_event(course_id)
+        else:
+            driver.go_to_last_event()
     except Exception as e:
         print(e)
         if time.time() - now > 60 * 10:
             driver.driver.quit()
             return
         time.sleep(random.random() * 60)
-        check(username, password, tries - 1)
+        check(course_id, username, password, tries - 1)
 
 
 def add(scheduler: bool = False, user=True):
