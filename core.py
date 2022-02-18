@@ -85,7 +85,7 @@ class LMSDriver:
     def go_to_last_event(self):
         if self.driver.current_url != self.my_url:
             self.go_to_my()
-        self.click(By.CSS_SELECTOR, 'a[data-type="event"')
+        self.click(By.CSS_SELECTOR, 'a[data-type="event"]')
         self.click_text_multiple('رفتن به فعالیت', 'Go to activity')
         if 'adobeconnect' in self.driver.current_url:
             self.go_to_adobeconnect()
@@ -93,12 +93,12 @@ class LMSDriver:
             raise Exception('Not implemented yet!')
 
     def go_to_adobeconnect(self, browser: bool = True):
-        if not 'adobeconnect' in self.driver.current_url:
+        if 'adobeconnect' not in self.driver.current_url:
             raise Exception('Driver is not on Adobe Connect event!')
         self.click(By.CLASS_NAME, 'aconbtnjoin')
         self.driver.switch_to.window(self.driver.window_handles[1])
         wait = WebDriverWait(self.driver, 120)
-        button = wait.until(expected_conditions.presence_of_element_located(
+        button = wait.until(expected_conditions.element_to_be_clickable(
             (By.CSS_SELECTOR, 'div.open-in-{}-button div.button-content'.format('browser' if browser else 'app'))))
         action = ActionChains(self.driver)
         action.move_to_element(button).click().perform()
