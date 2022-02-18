@@ -18,6 +18,7 @@ class LMSDriver:
         self.base_url = base_url
         option = ChromeOptions()
         option.add_experimental_option('detach', True)
+        option.add_experimental_option('excludeSwitches', ['enable-logging'])
         self.driver = Chrome(executable_path=chromedriver, chrome_options=option)
         if not cookies_path:
             cookies_path = '{}_cookies.pkl'.format(username)
