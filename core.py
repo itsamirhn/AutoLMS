@@ -123,7 +123,8 @@ class LMSDriver:
     def go_to_course_last_event(self, course_id):
         if self.driver.current_url != self.get_course_url(course_id):
             self.go_to_course(course_id)
-        self.click(By.XPATH, "//li[contains(@class, 'adobeconnect')][last()]//a[@class='aalink']")
+        self.click(By.XPATH,
+                   "//li[contains(@class,'adobeconnect') and not(contains(., 'رزرو'))][last()]//a[@class='aalink']")
         if 'adobeconnect' in self.driver.current_url:
             self.go_to_adobeconnect()
         else:

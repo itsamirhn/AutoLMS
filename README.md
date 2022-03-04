@@ -49,4 +49,5 @@ $ python main.py run
 
 ### Suported Universities
 
+- University of Tehran
 - Kharazmi University

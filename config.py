@@ -16,6 +16,7 @@ credentials_questions = [
         "message": "Select your university:",
         "choices": [
             Choice("https://lms.khu.ac.ir", name="Kharazmi"),
+            Choice("https://elearn5.ut.ac.ir", name="Tehran"),
         ],
     },
     {
