@@ -91,6 +91,7 @@ paths_questions = [
         "message": "Enter chromedriver path:",
         "name": "chromedriver",
         "validate": PathValidator(is_file=True, message="Input is not a file"),
+        "long_instruction": "If you don't know what is this, checkout https://github.com/itsamirhn/AutoLMS#how-to-download-chromedriver",
         "only_files": True,
         "filter": lambda file: str(Path(file).absolute()),
     },

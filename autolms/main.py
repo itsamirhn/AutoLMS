@@ -34,13 +34,13 @@ def go(course_id=None):
 
 
 def setup():
-    config.setup()
-    print("You can use `run` command now.")
+    if config.setup():
+        print("You can use `run` command now.")
 
 
 def edit():
-    config.edit()
-    print("You can use `run` command now.")
+    if config.edit():
+        print("You can use `run` command now.")
 
 
 def run():
