@@ -1,76 +1,63 @@
-import os
-import random
+import datetime
 import time
 
 import fire
-import yaml
-from crontab import CronTab
+import schedule
 
+import config
 from core import LMSDriver
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
 
-with open(os.path.join(dir_path, 'config.yml'), 'r') as f:
-    CFG = yaml.safe_load(f)
-
-
-def check(course_id=None, username: str = CFG['credentials']['username'],
-          password: str = CFG['credentials']['password'],
-          tries: int = 1):
-    if tries <= 0:
-        return
-    now = time.time()
-    driver = LMSDriver(CFG['paths']['chromedriver'], username, password, CFG['paths']['url'])
-    try:
-        if course_id:
-            driver.go_to_course_last_event(course_id)
-        else:
-            driver.go_to_last_event()
-    except Exception as e:
-        print(e)
-        if time.time() - now > 60 * 10:
-            driver.driver.quit()
-            return
-        time.sleep(random.random() * 60)
-        check(course_id, username, password, tries - 1)
-
-
-def add(scheduler: bool = False, user=True):
-    tab = ''
-    for course in CFG['courses']:
-        for cron in course['crons']:
-            tab += '{} {} {} check {} >{} 2>{} # autolms'.format(
-                cron,
-                CFG['paths']['python3'],
-                CFG['paths']['main'],
-                course['id'],
-                CFG['paths']['stdout'], CFG['paths']['stderr']
-            ) + '\n'
-    cron = CronTab(tab=tab)
-    if scheduler:
-        for _ in cron.run_scheduler():
-            print("Doing...")
+def check(chromedriver, username, password, url, course_id=None):
+    driver = LMSDriver(chromedriver, username, password, url)
+    if course_id:
+        driver.go_to_course_last_event(course_id)
     else:
-        reset(user)
-        cron.write(user=user)
+        driver.go_to_last_event()
 
 
-def show(user=True):
-    cron = CronTab(user=user)
-    for job in cron:
-        print(job)
+def go(course_id=None):
+    cfg = config.get_config()
+    if not cfg:
+        print("Run `setup` command for config first.")
+        return
+    chromedriver = cfg["paths"]["chromedriver"]
+    username = cfg["credentials"]["username"]
+    password = cfg["credentials"]["password"]
+    url = cfg["credentials"]["url"]
+    try:
+        print("Checking...")
+        check(chromedriver, username, password, url, course_id)
+    except Exception as e:
+        print("End")
 
 
-def reset(user=True):
-    cron = CronTab(user=user)
-    cron.remove_all(comment='autolms')
-    cron.write()
+def setup():
+    config.setup()
 
 
-if __name__ == '__main__':
+def run():
+    cfg = config.get_config()
+    if not cfg:
+        print("Run `setup` command for config first.")
+        return
+    for course in cfg["courses"]:
+        for session in course["sessions"]:
+            session_time = datetime.datetime.strptime(session["time"], "%H:%M") \
+                           - datetime.timedelta(seconds=int(cfg["options"]["rush"]))
+            rushed_time = session_time.strftime("%H:%M:%S")
+            getattr(schedule.every(), session["day"]).at(rushed_time).do(go, course_id=course["id"])
+            print("Add job for %s on %s at %s" % (course["name"], session["day"], rushed_time))
+    print("Running schedule...")
+    schedule.run_all()
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
+if __name__ == "__main__":
     fire.Fire({
-        'check': check,
-        'add': add,
-        'show': show,
-        'reset': reset
+        "go": go,
+        "run": run,
+        "setup": setup,
     })

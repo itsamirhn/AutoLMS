@@ -3,3 +3,5 @@ fire
 python-crontab
 pyyaml
 croniter
+InquirerPy
+schedule
