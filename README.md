@@ -10,11 +10,10 @@ AutoLMS is a tool for automating LMS and get into class automatically on specifi
 
 ## Install
 
-Clone the project:
+Use the pip package manager to install AutoLMS:
 
 ```sh
-$ git clone https://github.com/itsamirhn/AutoLMS
-$ cd AutoLMS
+$ pip install autolms
 ```
 
 ## Requirements
@@ -24,12 +23,6 @@ You have to install these manually:
 - python3
 - Chrome
 - [ChromeDriver](https://chromedriver.chromium.org/downloads)
-
-Then install python requirements:
-
-```sh
-$ pip install -r requirements.txt
-```
 
 ### How to download ChromeDriver?
 
@@ -42,7 +35,7 @@ If you are new to ChromeDriver, follow instructions below:
     2) Be careful, if you got error on run, it may because of difference between Chrome and ChromeDriver versions
 3) Select the file compatible with your system (Mac or Linux or Win)
 4) Unzip the downloaded file
-5) Put the `chromedriver` anywhere you want (It's just easier if you put it inside Cloned folder)
+5) Put the `chromedriver` anywhere you want
 6) On the setup of AutoLMS, type the path for `chromdriver` or just drag & drop the file into terminal
 
 ## Configuration
@@ -50,13 +43,13 @@ If you are new to ChromeDriver, follow instructions below:
 Just as easy as a command:
 
 ```sh
-$ python main.py setup
+$ autolms setup
 ```
 
 And anytime you wanted to edit configs (e.g. add new session or course):
 
 ```sh
-$ python main.py edit
+$ autolms edit
 ```
 
 ## Run
@@ -64,7 +57,7 @@ $ python main.py edit
 Finally, run the program for always:
 
 ```sh
-$ python main.py run
+$ autolms run
 ```
 
 ## License
