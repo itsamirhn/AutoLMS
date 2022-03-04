@@ -66,3 +66,7 @@ Finally, run the program for always:
 ```sh
 $ python main.py run
 ```
+
+## License
+
+AutoLMS is MIT licensed.
