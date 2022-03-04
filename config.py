@@ -11,24 +11,24 @@ yml_path = Path('config.yml')
 
 credentials_questions = [
     {
-        "type": "input",
-        "name": "username",
-        "message": "Enter your Username:",
-        "validate": lambda x: len(x) > 0,
-    },
-    {
-        "type": "password",
-        "name": "password",
-        "message": "Enter your Password:",
-        "validate": lambda x: len(x) > 0,
-    },
-    {
         "type": "list",
         "name": "url",
         "message": "Select your university:",
         "choices": [
             Choice("https://lms.khu.ac.ir", name="Kharazmi"),
         ],
+    },
+    {
+        "type": "input",
+        "name": "username",
+        "message": "Enter your LMS Username:",
+        "validate": lambda x: len(x) > 0,
+    },
+    {
+        "type": "password",
+        "name": "password",
+        "message": "Enter your LMS Password:",
+        "validate": lambda x: len(x) > 0,
     }
 ]
 
@@ -46,19 +46,21 @@ course_questions = [
     {
         "type": "input",
         "name": "name",
-        "message": "Enter course name:",
+        "message": "Enter new Course Name:",
         "validate": lambda x: len(x) > 0,
+        "long_instruction": "Your custom a name for calling this course (e.g. Advanced Programming)",
     },
     {
         "type": "input",
         "name": "id",
-        "message": "Enter course id:",
+        "message": "Enter Course ID in LMS:",
         "validate": NumberValidator(),
+        "long_instruction": "For example for a course like `http://lms.com/course/view.php?id=1194`, id is `1194`",
     },
     {
         "type": "list",
         "name": "day",
-        "message": "Select session day:",
+        "message": "Select a new Session Day:",
         "choices": [
             Choice("saturday", name="Saturday"),
             Choice("sunday", name="Sunday"),
@@ -72,7 +74,8 @@ course_questions = [
     {
         "type": "input",
         "name": "time",
-        "message": "Enter session time:",
+        "message": "Enter the Session Time:",
+        "instruction": "(HH:MM Format)",
         "validate": lambda x: re.match(r"^([0-2]\d:)?[0-5]\d:[0-5]\d$", x)
     },
 ]
@@ -103,14 +106,14 @@ def prompt_course():
     finished = False
     while not finished:
         course["sessions"].append(prompt(course_questions[2:]))
-        finished = inquirer.confirm("Are you finished adding time for %s course ?" % course["name"],
+        finished = inquirer.confirm("Are you finished adding Sessions for %s course ?" % course["name"],
                                     default=True).execute()
     return course
 
 
 def prompt_config():
     if Path(yml_path).exists():
-        if not inquirer.confirm("A config already exists, Do you want to reset it?").execute():
+        if not inquirer.confirm("A Config already exists, Do you want to reset it?").execute():
             return None
     config = {
         "credentials": prompt(credentials_questions),
