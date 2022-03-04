@@ -2,6 +2,12 @@
 
 AutoLMS is a tool for automating LMS and get into class automatically on specified times.
 
+### Suported Universities
+
+- University of Tehran
+- Kharazmi University
+- Shahid Beheshti University
+
 ## Install
 
 Clone the project:
@@ -46,9 +52,3 @@ Finally, run the program for always:
 ```sh
 $ python main.py run
 ```
-
-### Suported Universities
-
-- University of Tehran
-- Kharazmi University
-- Shahid Beheshti University
