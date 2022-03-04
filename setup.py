@@ -24,8 +24,6 @@ setup(
         ],
     },
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Students',
         'License :: OSI Approved :: MIT License',
     ],
 )
