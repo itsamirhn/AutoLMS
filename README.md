@@ -8,6 +8,8 @@ AutoLMS is a tool for automating LMS and get into class automatically on specifi
 - Kharazmi University
 - Shahid Beheshti University
 
+if your university is not listed, feel free to contribute or make an issue.
+
 ## Install
 
 Use the pip package manager to install AutoLMS:
