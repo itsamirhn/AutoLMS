@@ -61,7 +61,7 @@ course_questions = [
         "message": "Select session day:",
         "choices": [
             Choice("saturday", name="Saturday"),
-            Choice("Sunday", name="Sunday"),
+            Choice("sunday", name="Sunday"),
             Choice("monday", name="Monday"),
             Choice("tuesday", name="Tuesday"),
             Choice("wednesday", name="Wednesday"),

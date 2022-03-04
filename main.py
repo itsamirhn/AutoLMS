@@ -34,6 +34,7 @@ def go(course_id=None):
 
 def setup():
     config.setup()
+    print("You can use `run` command now.")
 
 
 def run():
@@ -49,7 +50,6 @@ def run():
             getattr(schedule.every(), session["day"]).at(rushed_time).do(go, course_id=course["id"])
             print("Add job for %s on %s at %s" % (course["name"], session["day"], rushed_time))
     print("Running schedule...")
-    schedule.run_all()
     while True:
         schedule.run_pending()
         time.sleep(1)
