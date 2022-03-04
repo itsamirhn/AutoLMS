@@ -1,10 +1,10 @@
 import re
-import time
 from pathlib import Path
 
 import yaml
 from InquirerPy import inquirer, prompt
 from InquirerPy.base import Choice
+from InquirerPy.separator import Separator
 from InquirerPy.validator import PathValidator, NumberValidator
 
 yml_path = Path('config.yml')
@@ -56,7 +56,10 @@ course_questions = [
         "message": "Enter Course ID in LMS:",
         "validate": NumberValidator(),
         "long_instruction": "For example for a course like `http://lms.com/course/view.php?id=1194`, id is `1194`",
-    },
+    }
+]
+
+session_questions = [
     {
         "type": "list",
         "name": "day",
@@ -92,29 +95,23 @@ paths_questions = [
 ]
 
 
-def validate_time(text):
-    try:
-        time.strptime(text, "%H:%M")
-        return True
-    except:
-        return False
+def prompt_session():
+    session = prompt(session_questions)
+    return session
 
 
 def prompt_course():
-    course = prompt(course_questions[:2])
+    course = prompt(course_questions)
     course["sessions"] = []
     finished = False
     while not finished:
-        course["sessions"].append(prompt(course_questions[2:]))
+        course["sessions"].append(prompt_session())
         finished = inquirer.confirm("Are you finished adding Sessions for %s course ?" % course["name"],
                                     default=True).execute()
     return course
 
 
 def prompt_config():
-    if Path(yml_path).exists():
-        if not inquirer.confirm("A Config already exists, Do you want to reset it?").execute():
-            return None
     config = {
         "credentials": prompt(credentials_questions),
         "paths": prompt(paths_questions),
@@ -128,12 +125,19 @@ def prompt_config():
     return config
 
 
-def setup():
-    config = prompt_config()
+def save_config(config):
     if not config:
         return
     with open(yml_path, 'w+') as f:
         yaml.safe_dump(config, f)
+
+
+def setup():
+    if Path(yml_path).exists():
+        if not inquirer.confirm("A Config already exists, Do you want to reset it?").execute():
+            return None
+    config = prompt_config()
+    save_config(config)
     return config
 
 
@@ -144,3 +148,80 @@ def get_config():
         return config
     else:
         return None
+
+
+def edit_session(session):
+    action = inquirer.select(message="What to you want to do with the Session:",
+                             instruction="%s on %s" % (session["time"], session["day"].title()),
+                             choices=[
+                                 Choice("edit", "Edit this Session"),
+                                 Choice("delete", "Delete this Session"),
+                             ]).execute()
+    if action == "delete":
+        return None
+    if action == "edit":
+        return prompt_session()
+
+
+def edit_course(course):
+    sessions_choices = []
+    for index, session in enumerate(course["sessions"]):
+        sessions_choices.append(Choice(index, name="%s on %s" % (session["time"], session["day"].title())))
+    sessions_choices.append(Separator())
+    sessions_choices.append(Choice("add", name="Add new Session"))
+    sessions_choices.append(Separator())
+    sessions_choices.append(Choice("delete", name="Delete this Course"))
+    session_index = inquirer.select(message="Select Session you want to edit:", choices=sessions_choices).execute()
+    if session_index == "delete":
+        return None
+    elif session_index == "add":
+        return course["sessions"].append(prompt_session())
+    else:
+        session = course["sessions"][session_index]
+        new_session = edit_session(session)
+        if new_session:
+            course["sessions"][session_index] = new_session
+        else:
+            course["sessions"].pop(session_index)
+        return course
+
+
+def edit_config(config):
+    sections = inquirer.select(message="Which section do you want to change:", choices=[
+        Choice("credentials", name="Credentials"),
+        Choice("options", name="Options"),
+        Choice("courses", name="Courses"),
+    ]).execute()
+    if sections == "credentials":
+        config["credentials"] = prompt(credentials_questions)
+    if sections == "options":
+        config["options"] = prompt(options_questions)
+    if sections == "courses":
+        courses_choices = []
+        for index, course in enumerate(config["courses"]):
+            courses_choices.append(Choice(index, name=course["name"]))
+        courses_choices.append(Separator())
+        courses_choices.append(Choice("add", name="Add new Course"))
+        course_index = inquirer.select(message="Select Course you want to edit:", choices=courses_choices).execute()
+        if course_index == "add":
+            config["courses"].append(prompt_course())
+        else:
+            course = config["courses"][course_index]
+            new_course = edit_course(course)
+            if new_course:
+                config["courses"][course_index] = new_course
+            else:
+                config["courses"].pop(course_index)
+    return config
+
+
+def edit():
+    if not Path(yml_path).exists():
+        if inquirer.confirm("No Config already exists, Do you want to create one?", default=True).execute():
+            return setup()
+        else:
+            return None
+    config = get_config()
+    config = edit_config(config)
+    save_config(config)
+    return config

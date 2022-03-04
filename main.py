@@ -37,6 +37,10 @@ def setup():
     print("You can use `run` command now.")
 
 
+def edit():
+    config.edit()
+
+
 def run():
     cfg = config.get_config()
     if not cfg:
@@ -60,4 +64,5 @@ if __name__ == "__main__":
         "go": go,
         "run": run,
         "setup": setup,
+        "edit": edit,
     })
