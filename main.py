@@ -39,6 +39,7 @@ def setup():
 
 def edit():
     config.edit()
+    print("You can use `run` command now.")
 
 
 def run():
