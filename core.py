@@ -114,6 +114,24 @@ class LMSDriver:
             action.perform()
             time.sleep(1)
 
+    def go_to_onlineclass(self, browser: bool = True):
+        if 'online' not in self.driver.current_url:
+            raise Exception('Driver is not on Onlineclass event!')
+        self.click(By.CSS_SELECTOR, 'input[name=submitbutton]')
+        wait = WebDriverWait(self.driver, 120)
+        button = wait.until(expected_conditions.element_to_be_clickable(
+            (By.CSS_SELECTOR, 'div.open-in-{}-button div.button-content'.format('browser' if browser else 'app'))))
+        action = ActionChains(self.driver)
+        action.move_to_element(button).click().perform()
+        if not browser:
+            return
+        self.driver.maximize_window()
+        action.reset_actions()
+        for i in range(60):
+            action.send_keys(Keys.ESCAPE)
+            action.perform()
+            time.sleep(1)
+
     def go_to_course(self, course_id):
         self.go(self.get_course_url(course_id))
         if self.driver.current_url == self.login_url:
@@ -124,9 +142,11 @@ class LMSDriver:
         if self.driver.current_url != self.get_course_url(course_id):
             self.go_to_course(course_id)
         self.click(By.XPATH,
-                   "//li[contains(@class,'adobeconnect') and not(contains(., 'رزرو'))][last()]//a[@class='aalink']")
+                   "//li[(contains(@class,'adobeconnect') or contains(@class,'onlineclass')) and not(contains(., 'رزرو'))][last()]//a[@class='aalink']")
         if 'adobeconnect' in self.driver.current_url:
             self.go_to_adobeconnect()
+        if 'onlineclass' in self.driver.current_url:
+            self.go_to_onlineclass()
         else:
             raise Exception('Not implemented yet!')
 

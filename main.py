@@ -29,6 +29,7 @@ def go(course_id=None):
         print("Checking...")
         check(chromedriver, username, password, url, course_id)
     except Exception as e:
+        print(e)
         print("End")
 
 
