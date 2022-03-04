@@ -4,8 +4,8 @@ import time
 import fire
 import schedule
 
-import config
-from core import LMSDriver
+import autolms.config as config
+from autolms.core import LMSDriver
 
 
 def check(chromedriver, username, password, url, course_id=None):
@@ -61,10 +61,14 @@ def run():
         time.sleep(1)
 
 
-if __name__ == "__main__":
+def main():
     fire.Fire({
         "go": go,
         "run": run,
         "setup": setup,
         "edit": edit,
     })
+
+
+if __name__ == "__main__":
+    main()

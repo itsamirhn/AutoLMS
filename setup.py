@@ -1,0 +1,31 @@
+from setuptools import setup
+
+setup(
+    name="AutoLMS",
+    version="0.1",
+    packages=["autolms"],
+    url="https://github.com/itsamirhn/AutoLMS",
+    download_url="https://github.com/itsamirhn/AutoLMS/archive/refs/tags/v0.1.tar.gz",
+    license="MIT",
+    author="AmirMohammad Hosseini Nasab",
+    author_email="awmirhn@gmail.com",
+    description="Automation of getting into LMS classes",
+    install_requires=[
+        "selenium",
+        "fire",
+        "pyyaml",
+        "InquirerPy",
+        "schedule",
+    ],
+    python_requires='>=3',
+    entry_points={
+        "console_scripts": [
+            "autolms=autolms.main:main",
+        ],
+    },
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Students',
+        'License :: OSI Approved :: MIT License',
+    ],
+)
