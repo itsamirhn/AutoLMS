@@ -46,16 +46,16 @@ class LMSDriver:
     def load_cookies(self, redirect_url=None):
         if not os.path.exists(self.cookies_path):
             if redirect_url:
-                self.driver.get(redirect_url)
+                self.go(redirect_url)
             return
-        self.driver.get(self.base_url)
+        self.go(self.base_url)
         self.driver.delete_all_cookies()
         with open(self.cookies_path, 'rb') as f:
             cookies = pickle.load(f)
             for cookie in cookies:
                 self.driver.add_cookie(cookie)
         if redirect_url:
-            self.driver.get(redirect_url)
+            self.go(redirect_url)
 
     def click(self, by: str, value: str = None, timeout: int = 10):
         wait = WebDriverWait(self.driver, timeout)
@@ -67,10 +67,15 @@ class LMSDriver:
     def click_text_multiple(self, text1, text2, timeout: int = 10):
         self.click(By.XPATH, "//*[contains(text(), '{}') or contains(text(), '{}')]".format(text1, text2), timeout)
 
+    def go(self, url):
+        self.driver.get(url)
+        if self.driver.current_url != url:
+            self.login()
+        self.driver.get(url)
+
     def login(self):
         if not self.username or not self.password:
             raise Exception('No login credentials!')
-        self.driver.get(self.login_url)
         self.driver.find_element(By.ID, 'username').send_keys(self.username)
         self.driver.find_element(By.ID, 'password').send_keys(self.password + Keys.RETURN)
         if self.driver.current_url == self.login_url:
@@ -78,9 +83,7 @@ class LMSDriver:
         self.save_cookies()
 
     def go_to_my(self):
-        self.driver.get(self.my_url)
-        if self.driver.current_url == self.login_url:
-            self.login()
+        self.go(self.my_url)
 
     def go_to_last_event(self):
         if self.driver.current_url != self.my_url:
@@ -112,7 +115,7 @@ class LMSDriver:
             time.sleep(1)
 
     def go_to_course(self, course_id):
-        self.driver.get(self.get_course_url(course_id))
+        self.go(self.get_course_url(course_id))
         if self.driver.current_url == self.login_url:
             self.login()
             self.go_to_course(course_id)
