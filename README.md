@@ -33,6 +33,12 @@ Just as easy as a command:
 $ python main.py setup
 ```
 
+And anytime you wanted to edit configs (e.g. add new session or course):
+
+```sh
+$ python main.py edit
+```
+
 ## Run
 
 Finally, run the program for always:
