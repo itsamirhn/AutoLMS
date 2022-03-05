@@ -1,6 +1,5 @@
 import os
 import pickle
-import time
 
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.action_chains import ActionChains
@@ -100,7 +99,7 @@ class LMSDriver:
             raise Exception('Driver is not on Adobe Connect event!')
         self.click(By.CLASS_NAME, 'aconbtnjoin')
         self.driver.switch_to.window(self.driver.window_handles[1])
-        wait = WebDriverWait(self.driver, 120)
+        wait = WebDriverWait(self.driver, 30)
         button = wait.until(expected_conditions.element_to_be_clickable(
             (By.CSS_SELECTOR, 'div.open-in-{}-button div.button-content'.format('browser' if browser else 'app'))))
         action = ActionChains(self.driver)
@@ -108,17 +107,17 @@ class LMSDriver:
         if not browser:
             return
         self.driver.maximize_window()
-        action.reset_actions()
-        for i in range(60):
-            action.send_keys(Keys.ESCAPE)
-            action.perform()
-            time.sleep(1)
+        iframe = wait.until(expected_conditions.visibility_of_element_located(
+            (By.CSS_SELECTOR, 'iframe[name=html-meeting-view-frame]')
+        ))
+        self.driver.switch_to.frame(iframe)
+        self.click(By.CLASS_NAME, "spectrum-Button--secondary", 30)
 
     def go_to_onlineclass(self, browser: bool = True):
         if 'online' not in self.driver.current_url:
             raise Exception('Driver is not on Onlineclass event!')
         self.click(By.CSS_SELECTOR, 'input[name=submitbutton]')
-        wait = WebDriverWait(self.driver, 120)
+        wait = WebDriverWait(self.driver, 30)
         button = wait.until(expected_conditions.element_to_be_clickable(
             (By.CSS_SELECTOR, 'div.open-in-{}-button div.button-content'.format('browser' if browser else 'app'))))
         action = ActionChains(self.driver)
@@ -126,11 +125,11 @@ class LMSDriver:
         if not browser:
             return
         self.driver.maximize_window()
-        action.reset_actions()
-        for i in range(60):
-            action.send_keys(Keys.ESCAPE)
-            action.perform()
-            time.sleep(1)
+        iframe = wait.until(expected_conditions.visibility_of_element_located(
+            (By.CSS_SELECTOR, 'iframe[name=html-meeting-view-frame]')
+        ))
+        self.driver.switch_to.frame(iframe)
+        self.click(By.CLASS_NAME, "spectrum-Button--secondary", 30)
 
     def go_to_course(self, course_id):
         self.go(self.get_course_url(course_id))
