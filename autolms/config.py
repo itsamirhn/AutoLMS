@@ -8,7 +8,7 @@ from InquirerPy import inquirer, prompt
 from InquirerPy.base import Choice
 from InquirerPy.separator import Separator
 from InquirerPy.utils import color_print
-from InquirerPy.validator import PathValidator, NumberValidator
+from InquirerPy.validator import PathValidator
 
 yml_path = Path('config.yml')
 
@@ -38,6 +38,13 @@ def find_chromedriver(tl):
             return f
     color_print([("#B00020", "Not Found!")])
     return ''
+
+
+def find_id(url_or_id):
+    match = re.search(r"(id=)?(\d+)", url_or_id)
+    if match:
+        return int(match.group(2))
+    return None
 
 
 credentials_questions = [
@@ -86,9 +93,11 @@ course_questions = [
     {
         "type": "input",
         "name": "id",
-        "message": "Enter Course ID in LMS:",
-        "validate": NumberValidator(),
-        "long_instruction": "For example for a course like `http://lms.com/course/view.php?id=1194`, id is `1194`",
+        "message": "Enter Course ID or just Course URL in LMS:",
+        "validate": lambda x: find_id(x) is not None,
+        "filter": lambda x: find_id(x),
+        "transformer": lambda x: find_id(x),
+        "long_instruction": "URL Something like `lms.com/course/view.php?id=1194` or just ID like `1194`",
     }
 ]
 
