@@ -2,10 +2,10 @@ from setuptools import setup
 
 setup(
     name="AutoLMS",
-    version="0.3",
+    version="0.3.1",
     packages=["autolms"],
     url="https://github.com/itsamirhn/AutoLMS",
-    download_url="https://github.com/itsamirhn/AutoLMS/archive/refs/tags/v0.3.tar.gz",
+    download_url="https://github.com/itsamirhn/AutoLMS/archive/refs/tags/v0.3.1.tar.gz",
     license="MIT",
     author="AmirMohammad Hosseini Nasab",
     author_email="awmirhn@gmail.com",
