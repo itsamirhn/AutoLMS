@@ -145,11 +145,12 @@ class LMSDriver:
                    "//li[(contains(@class,'adobeconnect') or contains(@class,'onlineclass')) and not(contains(., 'رزرو'))][last()]//a[@class='aalink']")
         if 'adobeconnect' in self.driver.current_url:
             self.go_to_adobeconnect()
-        if 'onlineclass' in self.driver.current_url:
+        elif 'onlineclass' in self.driver.current_url:
             self.go_to_onlineclass()
         else:
             raise Exception('Not implemented yet!')
 
-    def check(self):
-        # TODO: Check last event exist or not!
-        self.go_to_last_event()
+
+def check(self):
+    # TODO: Check last event exist or not!
+    self.go_to_last_event()
