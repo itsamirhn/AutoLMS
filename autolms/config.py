@@ -13,16 +13,29 @@ yml_path = Path('config.yml')
 
 
 def find(name, path, tl=None):
-    print(f"Finding {name}...")
+    path = str(Path(path).absolute())
     start = time.time()
     for root, dirs, files in os.walk(path):
         if tl and time.time() >= start + tl:
-            print(f"Not Found!")
-            return ''
+            return False
         if name in files:
-            print(f"Found!")
             return os.path.join(root, name)
-    print(f"Not Found!")
+    return None
+
+
+def find_chromedriver(tl):
+    chromedriver = "chromedriver"
+    if os.name == 'nt':
+        chromedriver = "chromedriver.exe"
+    paths = [Path.home() / "Downloads", Path.home() / "Desktop", Path("/")]
+    start = time.time()
+    for path in paths:
+        print(f"Searching for {chromedriver} in {path}")
+        f = find(chromedriver, path, tl - (time.time() - start))
+        if f:
+            print("Found!")
+            return f
+    print("Not Found!")
     return ''
 
 
@@ -111,7 +124,7 @@ paths_questions = [
         "long_instruction": "If you don't know what is this, checkout https://github.com/itsamirhn/AutoLMS#how-to-download-chromedriver",
         "only_files": True,
         "filter": lambda file: str(Path(file).absolute()),
-        "default": lambda _: find('chromedriver', '/', 5)
+        "default": lambda _: find_chromedriver(10)
     },
 ]
 
