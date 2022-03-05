@@ -7,6 +7,7 @@ import yaml
 from InquirerPy import inquirer, prompt
 from InquirerPy.base import Choice
 from InquirerPy.separator import Separator
+from InquirerPy.utils import color_print
 from InquirerPy.validator import PathValidator, NumberValidator
 
 yml_path = Path('config.yml')
@@ -30,12 +31,12 @@ def find_chromedriver(tl):
     paths = [Path.home() / "Downloads", Path.home() / "Desktop", Path("/")]
     start = time.time()
     for path in paths:
-        print(f"Searching for {chromedriver} in {path}")
+        color_print([("#DCE775", f"Searching for {chromedriver} in {path}")])
         f = find(chromedriver, path, tl - (time.time() - start))
         if f:
-            print("Found!")
+            color_print([("#00E676", "Found!")])
             return f
-    print("Not Found!")
+    color_print([("#B00020", "Not Found!")])
     return ''
 
 
@@ -121,8 +122,8 @@ paths_questions = [
         "message": "Enter chromedriver path:",
         "name": "chromedriver",
         "validate": PathValidator(is_file=True, message="Input is not a file"),
-        "long_instruction": "If you don't know what is this, checkout https://github.com/itsamirhn/AutoLMS#how-to-download-chromedriver",
-        "only_files": True,
+        "long_instruction": "If you don't know what is this, checkout:\n"
+                            "https://github.com/itsamirhn/AutoLMS#how-to-download-chromedriver",
         "filter": lambda file: str(Path(file).absolute()),
         "default": lambda _: find_chromedriver(10)
     },
@@ -155,7 +156,7 @@ def prompt_config():
     finished = False
     while not finished:
         config["courses"].append(prompt_course())
-        finished = inquirer.confirm("Are you finished?", default=True).execute()
+        finished = inquirer.confirm("Are you finished adding Courses?", default=True).execute()
     return config
 
 
