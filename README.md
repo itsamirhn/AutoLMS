@@ -31,14 +31,15 @@ You have to install these manually:
 If you are new to ChromeDriver, follow instructions below:
 
 1) Go this [Address](https://chromedriver.chromium.org/downloads)
-2) Choose your Chrome corresponding version in the list
+2) Find out your Chrome app version by going to `chrome://version` address with Chrome
+3) Choose your Chrome corresponding version in the list
     1) For example if you are using Chrome version 97.xx then choose
        `ChromeDriver 97.xx`
     2) Be careful, if you got error on run, it may because of difference between Chrome and ChromeDriver versions
-3) Select the file compatible with your system (Mac or Linux or Win)
-4) Unzip the downloaded file
-5) Put the `chromedriver` anywhere you want
-6) In the setup of AutoLMS, **program will try to find your `chromdriver` automatically**, If it doesn't found or the
+4) Select the file compatible with your system (Mac or Linux or Win)
+5) Unzip the downloaded file
+6) Put the `chromedriver` anywhere you want
+7) In the setup of AutoLMS, **program will try to find your `chromdriver` automatically**, If it doesn't found or the
    path is wrong, type `chromedriver` path manually or just drag & drop the file into terminal
 
 ## Configuration
