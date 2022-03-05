@@ -172,6 +172,7 @@ def prompt_config():
 def save_config(config):
     if not config:
         return
+    color_print([("#00E676", "New Config saved successfully!")])
     with open(yml_path, 'w+') as f:
         yaml.safe_dump(config, f)
 
