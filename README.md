@@ -38,7 +38,8 @@ If you are new to ChromeDriver, follow instructions below:
 3) Select the file compatible with your system (Mac or Linux or Win)
 4) Unzip the downloaded file
 5) Put the `chromedriver` anywhere you want
-6) On the setup of AutoLMS, type the path for `chromedriver` or just drag & drop the file into terminal
+6) In the setup of AutoLMS, **program will try to find your `chromdriver` automatically**, If it doesn't found or the
+   path is wrong, type `chromedriver` path manually or just drag & drop the file into terminal
 
 ## Configuration
 
