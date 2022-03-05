@@ -220,7 +220,8 @@ def edit_course(course):
     if session_index == "delete":
         return None
     elif session_index == "add":
-        return course["sessions"].append(prompt_session())
+        course["sessions"].append(prompt_session())
+        return course
     else:
         session = course["sessions"][session_index]
         new_session = edit_session(session)
