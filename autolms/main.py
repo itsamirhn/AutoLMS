@@ -24,7 +24,7 @@ def go(course_id=None, course_name=None):
         print("Run `setup` command for config first.")
         return
     if not course_name:
-        course_id = course_name
+        course_name = course_id
     chromedriver = cfg["paths"]["chromedriver"]
     username = cfg["credentials"]["username"]
     password = cfg["credentials"]["password"]
