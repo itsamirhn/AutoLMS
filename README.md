@@ -2,7 +2,7 @@
 
 AutoLMS is a tool for automating LMS and get into class automatically on specified times.
 
-### Suported Universities
+### Supported Universities
 
 - University of Tehran
 - Kharazmi University
