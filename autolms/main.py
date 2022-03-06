@@ -49,7 +49,7 @@ def edit():
         print("You can use `run` command now.")
 
 
-def run():
+def run(alert=False):
     cfg = config.get_config()
     if not cfg:
         print("Run `setup` command for config first.")
@@ -65,8 +65,9 @@ def run():
     print("Running schedule...")
     while True:
         schedule.run_pending()
-        while len(events) > 0:
-            yield events.pop(0)
+        if alert:
+            while len(events) > 0:
+                yield events.pop(0)
         time.sleep(1)
 
 
