@@ -7,6 +7,7 @@ AutoLMS is a tool for automating LMS and get into class automatically on specifi
 - University of Tehran
 - Kharazmi University
 - Shahid Beheshti University
+- Iran University of Science and Technology
 
 if your university is not listed, feel free to contribute or make an issue.
 

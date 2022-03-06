@@ -75,8 +75,12 @@ class LMSDriver:
     def login(self):
         if not self.username or not self.password:
             raise Exception('No login credentials!')
-        self.driver.find_element(By.ID, 'username').send_keys(self.username)
-        self.driver.find_element(By.ID, 'password').send_keys(self.password + Keys.RETURN)
+        if len(self.driver.find_elements(By.XPATH, "//a[contains(text(), 'سامیا')]")) > 0:
+            redirect = self.driver.find_element(By.XPATH, "//a[contains(text(), 'سامیا')]")
+            redirect.click()
+        self.driver.find_element(By.XPATH, "//input[@id='username' or @name='name']").send_keys(self.username)
+        self.driver.find_element(By.XPATH, "//input[@id='password' or @name='pass']").send_keys(
+            self.password + Keys.RETURN)
         if self.driver.current_url == self.login_url:
             raise Exception('Invalid credentials!')
         self.save_cookies()
@@ -133,15 +137,11 @@ class LMSDriver:
 
     def go_to_course(self, course_id):
         self.go(self.get_course_url(course_id))
-        if self.driver.current_url == self.login_url:
-            self.login()
-            self.go_to_course(course_id)
 
     def go_to_course_last_event(self, course_id):
-        if self.driver.current_url != self.get_course_url(course_id):
-            self.go_to_course(course_id)
+        self.go_to_course(course_id)
         self.click(By.XPATH,
-                   "//li[(contains(@class,'adobeconnect') or contains(@class,'onlineclass')) and not(contains(., 'رزرو'))][last()]//a[@class='aalink']")
+                   "//li[(contains(@class,'adobeconnect') or contains(@class,'onlineclass')) and not(contains(., 'رزرو'))][last()]//a")
         if 'adobeconnect' in self.driver.current_url:
             self.go_to_adobeconnect()
         elif 'onlineclass' in self.driver.current_url:
