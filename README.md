@@ -38,7 +38,7 @@ If you are new to ChromeDriver, follow instructions below:
        `ChromeDriver 98.x.x`
     2) Be careful, if you got error on run, it may because of difference between Chrome and ChromeDriver versions
 3) Select the file compatible with your system (Mac or Linux or Win)
-4) Unzip the downloaded file
+4) Unzip the downloaded file, **You don't need to open or run it**
 5) Put the `chromedriver` anywhere you want
 6) In the configuration of AutoLMS, **program will try to find your `chromdriver` automatically**, If it doesn't found
    or the path is wrong, type `chromedriver` path manually or just drag & drop the file into terminal
