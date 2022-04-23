@@ -1,5 +1,10 @@
 # AutoLMS
 
+[![PyPI version shields.io](https://img.shields.io/pypi/v/AutoLMS.svg)](https://pypi.python.org/pypi/AutoLMS/)
+[![PyPI license](https://img.shields.io/pypi/l/AutoLMS.svg?color=blue)](https://pypi.python.org/pypi/AutoLMS/)
+[![PyPI download month](https://img.shields.io/pypi/dm/AutoLMS.svg)](https://pypi.python.org/pypi/AutoLMS/)
+[![GitHub stars](https://img.shields.io/github/stars/itsamirhn/AutoLMS.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/itsamirhn/AutoLMS/stargazers/)
+
 AutoLMS is a tool for automating LMS and get into class automatically on specified times.
 
 ### Supported Universities
