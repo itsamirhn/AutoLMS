@@ -72,7 +72,7 @@ class LMSDriver:
             self.login()
         self.driver.get(url)
 
-    def login(self):
+    def login(self, tries=3):
         if not self.username or not self.password:
             raise Exception("No login credentials!")
         if len(self.driver.find_elements(By.XPATH, "//a[contains(text(), 'سامیا')]")) > 0:
@@ -82,7 +82,10 @@ class LMSDriver:
         self.driver.find_element(By.XPATH, "//input[@id='password' or @name='pass']").send_keys(
             self.password + Keys.RETURN)
         if self.driver.current_url == self.login_url:
-            raise Exception("Invalid credentials!")
+            if tries > 0:
+                self.login(tries - 1)
+            else:
+                raise Exception("Login failed!")
         self.save_cookies()
 
     def go_to_my(self):
