@@ -10,7 +10,7 @@ from InquirerPy.separator import Separator
 from InquirerPy.utils import color_print
 from InquirerPy.validator import PathValidator
 
-yml_path = Path('config.yml')
+yml_path = Path.home() / Path('config.yml')
 
 
 def find(name, path, tl=None):
