@@ -101,7 +101,7 @@ class LMSDriver:
         else:
             raise Exception("Not implemented yet!")
 
-    def go_to_adobeconnect(self, browser: bool = False):
+    def go_to_adobeconnect(self, browser: bool = True):
         if "adobeconnect" not in self.driver.current_url:
             raise Exception("Driver is not on Adobe Connect event!")
         self.click(By.CLASS_NAME, "aconbtnjoin")
